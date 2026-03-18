@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0c0e14">
+<title>Morgenplaner — Fuchur e.V.</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTW9yZ2VucGxhbmVyIiwic2hvcnRfbmFtZSI6Ik1vcmdlbnBsYW5lciIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGMwZTE0IiwidGhlbWVfY29sb3IiOiIjRTg4NDFBIn0=">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0c0e14;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);--txt:#e8e9ed;--muted:rgba(255,255,255,0.3);--label:rgba(255,255,255,0.3);--accent:#E8841A;--accent-bg:rgba(232,132,26,0.10);--accent-border:rgba(232,132,26,0.35);--blue:#5BA4B8;--green:#6ee7b7}
+body{background:var(--bg);color:var(--txt);font-family:'DM Sans',-apple-system,sans-serif;min-height:100vh;max-width:480px;margin:0 auto;position:relative;overflow-x:hidden}
+.glow1{position:absolute;top:-120px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(232,132,26,0.12) 0%,transparent 70%);pointer-events:none}
+.glow2{position:absolute;top:-60px;right:-100px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,164,184,0.08) 0%,transparent 70%);pointer-events:none}
+.rel{position:relative;z-index:1}
+
+h1{font-family:'Outfit',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,#E8841A,#f0a84a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+label.lbl{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--label);margin-bottom:6px;padding-left:2px}
+.inp{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--txt);font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;outline:none;-webkit-appearance:none;appearance:none}
+select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.inp:focus{border-color:rgba(232,132,26,0.4)}
+
+.transport-tag{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600}
+.transport-tag.bus{background:rgba(91,164,184,0.08);border:1px solid rgba(91,164,184,0.15);color:var(--blue)}
+.transport-tag.bike{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);color:var(--green)}
+
+.time-row{display:flex;gap:8px;align-items:center}
+.time-row .colon{font-size:22px;font-weight:800;color:rgba(255,255,255,0.25)}
+
+.settings-row{display:flex;gap:8px}
+.settings-row>div{flex:1}
+.range-wrap{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04)}
+.range-wrap input[type=range]{flex:1;accent-color:var(--accent)}
+.range-val{font-family:'DM Mono',monospace;font-weight:500;font-size:14px;min-width:28px}
+
+.btn-reminder{cursor:pointer;border-radius:12px;padding:12px 18px;font-weight:700;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid;transition:all .2s}
+.btn-reminder.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.btn-reminder.off{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3)}
+
+.btn-calc{width:100%;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;letter-spacing:.3px;cursor:pointer;transition:all .2s;margin-bottom:24px}
+.btn-calc.active{background:linear-gradient(135deg,#E8841A,#d4700e);color:#fff;box-shadow:0 4px 24px rgba(232,132,26,0.3)}
+.btn-calc.disabled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.2);cursor:not-allowed}
+
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(232,132,26,0.3),transparent);margin-bottom:20px}
+
+/* Result Cards */
+.cards{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;flex:1;min-width:42%}
+.card.hi{background:var(--accent-bg);border:2px solid var(--accent)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start}
+.card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.35);margin-bottom:4px}
+.card-time{font-size:28px;font-weight:800;letter-spacing:-1px;font-family:'DM Mono',monospace;color:#f0f0f0}
+.card.hi .card-time{color:var(--accent)}
+.card-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px}
+
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px}
+.pill.ok{background:#064e3b;color:#6ee7b7}
+.pill.knapp{background:#713f12;color:#fde047}
+.pill.krit{background:#7f1d1d;color:#fca5a5}
+.pill-dot{width:5px;height:5px;border-radius:50%;display:inline-block}
+
+/* Alarm buttons */
+.alarm-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;background:rgba(232,132,26,0.15);border:1px solid var(--accent-border);border-radius:8px;padding:5px 8px;cursor:pointer;color:var(--accent);font-size:11px;font-weight:700;font-family:'DM Sans',sans-serif;flex-shrink:0;text-decoration:none}
+.alarm-btn.wide{padding:6px 10px;gap:5px}
+
+.alarm-bar{display:flex;gap:6px;margin-bottom:16px;padding:12px 14px;background:rgba(232,132,26,0.06);border:1px solid rgba(232,132,26,0.15);border-radius:14px;flex-wrap:wrap;align-items:center}
+.alarm-bar-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);margin-right:4px;width:100%;margin-bottom:2px}
+
+/* Reasoning */
+.reason{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6}
+.reason strong{color:rgba(255,255,255,0.55)}
+
+/* Toggle sections */
+.toggle-btn{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:13px 16px;cursor:pointer;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.toggle-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:6px 14px;margin-bottom:10px;display:none}
+.toggle-panel.open{display:block}
+
+.routine-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.routine-row:last-child{border-bottom:none}
+.routine-icon{font-size:18px;width:28px;text-align:center}
+.routine-info{flex:1}
+.routine-name{font-weight:600;font-size:13px}
+.routine-dur{font-size:10px;color:rgba(255,255,255,0.25)}
+.routine-time{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--accent);margin-right:6px}
+
+.sched-grid{display:flex;flex-wrap:wrap;gap:4px}
+.sched-chip{font-family:'DM Mono',monospace;font-size:11px;padding:4px 7px;border-radius:6px;background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.06)}
+.sched-chip.sel{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
+
+.footer{margin-top:30px;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.04);font-size:10px;color:rgba(255,255,255,0.18);text-align:center;line-height:1.6}
+
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fu .4s ease-out}
+
+#results{display:none}
+#results.show{display:block}
+</style>
+</head>
+<body>
+<div class="glow1"></div>
+<div class="glow2"></div>
+
+<!-- HEADER -->
+<div class="rel" style="padding:24px 20px 16px">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:28px">🐉</span>
+    <div>
+      <h1>Morgenplaner</h1>
+      <p style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;letter-spacing:.5px">Fuchur e.V. · Linie 35 · Rückwärtsrechnung</p>
+    </div>
+  </div>
+</div>
+
+<!-- INPUTS -->
+<div class="rel" style="padding:0 16px">
+
+  <div style="margin-bottom:12px">
+    <label class="lbl">📅 Datum</label>
+    <input type="date" id="inDate" class="inp">
+    <div id="dayInfo" style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px;padding-left:2px"></div>
+  </div>
+
+  <div style="margin-bottom:12px">
+    <label class="lbl">📍 Wohin?</label>
+    <select id="inDest" class="inp">
+      <option value="">— Ziel wählen —</option>
+      <optgroup label="🚌 P+R (Bus Linie 35)">
+        <option value="bus|21">Büro Neckargemünd (21 Min)</option>
+        <option value="bus|45">Neckarbischofsheim (45 Min)</option>
+        <option value="bus|26">Schönau (26 Min)</option>
+        <option value="bus|43">Sinsheim (43 Min)</option>
+        <option value="bus|42">Eberbach (42 Min)</option>
+        <option value="bus|35">Baiertal (35 Min)</option>
+        <option value="bus|38">Dielheim (38 Min)</option>
+        <option value="bus|25">Dilsberg (25 Min)</option>
+        <option value="bus|0">P+R individuell…</option>
+      </optgroup>
+      <optgroup label="🚲 Fahrrad ab Haustür">
+        <option value="bike|24">Heidelberg Hbf (24 Min)</option>
+        <option value="bike|20">Ramsperger (20 Min)</option>
+        <option value="bike|16">Hartmann (16 Min)</option>
+        <option value="bike|20">Dr. Wang (20 Min)</option>
+        <option value="bike|15">Bismarckplatz (15 Min)</option>
+        <option value="bike|12">S-Bhf HD-Altstadt (12 Min)</option>
+        <option value="bike|16">KJP Ambulanz (16 Min)</option>
+        <option value="bike|15">STEP Station (15 Min)</option>
+        <option value="bike|0">Fahrrad individuell…</option>
+      </optgroup>
+    </select>
+    <div id="transportTag"></div>
+  </div>
+
+  <div id="customWrap" style="margin-bottom:12px;display:none">
+    <label class="lbl" id="customLabel">🚗 Fahrzeit (Min)</label>
+    <input type="number" id="inCustom" class="inp" min="1" max="120" value="20" placeholder="z.B. 25">
+  </div>
+
+  <div style="margin-bottom:12px">
+    <label class="lbl">⏰ Ich muss da sein um</label>
+    <div class="time-row">
+      <select id="inHour" class="inp" style="flex:1;text-align:center"></select>
+      <span class="colon">:</span>
+      <select id="inMin" class="inp" style="flex:1;text-align:center"></select>
+    </div>
+  </div>
+
+  <div class="settings-row" style="margin-bottom:18px">
+    <div>
+      <label class="lbl">😴 Schlaf</label>
+      <div class="range-wrap">
+        <input type="range" id="inSleep" min="6" max="10" step="0.5" value="9">
+        <span class="range-val" id="sleepVal">9h</span>
+      </div>
+    </div>
+    <div>
+      <label class="lbl">💊 Reminder</label>
+      <button class="btn-reminder on" id="btnReminder" onclick="toggleReminder()">AN</button>
+    </div>
+  </div>
+
+  <button class="btn-calc disabled" id="btnCalc" onclick="doCalc()">Berechnen</button>
+</div>
+
+<!-- RESULTS -->
+<div class="rel fade-up" style="padding:0 16px" id="results">
+  <div class="divider"></div>
+
+  <div class="alarm-bar" id="alarmBar"></div>
+
+  <div class="cards" id="row1"></div>
+  <div class="cards" id="row2"></div>
+  <div class="cards" id="row3"></div>
+
+  <div class="reason" id="reason"></div>
+
+  <button class="toggle-btn" onclick="toggle('routine')">
+    <span id="routineLabel">☀️ Morgenroutine (72 Min)</span>
+    <span id="routineArrow" style="color:rgba(255,255,255,0.25);font-size:12px">▼</span>
+  </button>
+  <div class="toggle-panel" id="routine"></div>
+
+  <div id="busSection">
+    <button class="toggle-btn" onclick="toggle('schedule')">
+      <span id="schedLabel">🚌 Fahrplan Linie 35</span>
+      <span id="schedArrow" style="color:rgba(255,255,255,0.25);font-size:12px">▼</span>
+    </button>
+    <div class="toggle-panel" id="schedule"></div>
+  </div>
+</div>
+
+<div class="footer rel">
+  rnv Linie 35 · Gültig ab 23.06.2025 · Angaben ohne Gewähr<br>Morgenplaner v3 · Fuchur e.V.
+</div>
+
+<script>
+// ── BUS SCHEDULE ──
+const BUS={
+weekday:[[4,[26,56]],[5,[16,36,56]],[6,[16,36,56]],[7,[16,36,56]],[8,[16,36,56]],[9,[16,36,56]],[10,[16,36,56]],[11,[16,36,56]],[12,[16,36,56]],[13,[16,26,36,56]],[14,[16,36,56]],[15,[16,36,56]],[16,[16,36,56]],[17,[16,36,56]],[18,[16,36,56]],[19,[16,36,56]],[20,[16,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]],
+saturday:[[5,[2,32]],[6,[2,32]],[7,[2,32]],[8,[2,22,32,56]],[9,[16,36,56]],[10,[16,36,56]],[11,[16,36,56]],[12,[16,36,56]],[13,[16,36,56]],[14,[16,36,56]],[15,[16,36,56]],[16,[16,36,56]],[17,[16,36,56]],[18,[16,36,56]],[19,[16,36,56]],[20,[16,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]],
+sunday:[[7,[32]],[8,[32]],[9,[32]],[10,[32]],[11,[32]],[12,[2,32]],[13,[2,32]],[14,[2,32]],[15,[2,32]],[16,[2,32]],[17,[2,32]],[18,[2,32]],[19,[2,32]],[20,[2,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]]
+};
+const WALK=3,BUSRIDE=6,BUFFER=5,BIKEBUF=5;
+const ROUTINE=[
+{l:"Snooze / Wachwerden",m:20,i:"😴"},
+{l:"Gassi mit Lilly",m:15,i:"🐕"},
+{l:"Kaffee & Frühstück",m:10,i:"☕"},
+{l:"Bad-Routine",m:12,i:"🚿"},
+{l:"Tasche & Schlüssel",m:5,i:"🎒"},
+{l:"Puffer",m:10,i:"⏳"}
+];
+const RTOTAL=ROUTINE.reduce((s,r)=>s+r.m,0);
+
+// ── Helpers ──
+const p=n=>String(n).padStart(2,'0');
+const ft=d=>`${p(d.getHours())}:${p(d.getMinutes())}`;
+function dayType(ds){const d=new Date(ds+'T12:00:00').getDay();return d===0?'sunday':d===6?'saturday':'weekday'}
+function dayLabel(t){return{weekday:'Werktag',saturday:'Samstag',sunday:'Sonn-/Feiertag'}[t]}
+function allDeps(t){const o=[];for(const[h,ms]of BUS[t])for(const m of ms)o.push({h,m,t:h*60+m});return o.sort((a,b)=>a.t-b.t)}
+function findBus(t,mx){const d=allDeps(t);for(let i=d.length-1;i>=0;i--)if(d[i].t<=mx)return{dep:d[i],all:d};return d.length?{dep:d[0],all:d}:null}
+
+// ── Alarm ──
+function setAlarm(h,m,label){
+  const url=`intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${h};i.android.intent.extra.alarm.MINUTES=${m};S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent(label)};B.android.intent.extra.alarm.SKIP_UI=false;end`;
+  window.location.href=url;
+}
+function alarmBtn(date,label,wide){
+  const h=date.getHours(),m=date.getMinutes();
+  return `<a class="alarm-btn${wide?' wide':''}" href="javascript:void(0)" onclick="setAlarm(${h},${m},'${label.replace(/'/g,"\\'")}')">⏰${wide?' Wecker':''}</a>`;
+}
+function alarmBarBtn(date,emoji,shortLabel,fullLabel){
+  const h=date.getHours(),m=date.getMinutes();
+  return `<a class="alarm-btn wide" href="javascript:void(0)" onclick="setAlarm(${h},${m},'${fullLabel.replace(/'/g,"\\'")}')"">${emoji} ${shortLabel} ${ft(date)}</a>`;
+}
+
+// ── Init ──
+const $=id=>document.getElementById(id);
+let reminderOn=true;
+
+// Date default = tomorrow
+const tom=new Date();tom.setDate(tom.getDate()+1);
+$('inDate').value=tom.toISOString().slice(0,10);
+updateDayInfo();
+
+// Hour/Min selects
+for(let i=0;i<24;i++)$('inHour').innerHTML+=`<option value="${i}"${i===9?' selected':''}>${p(i)}</option>`;
+for(const m of[0,5,10,15,20,25,30,35,40,45,50,55])$('inMin').innerHTML+=`<option value="${m}">${p(m)}</option>`;
+
+// Events
+$('inDate').addEventListener('change',()=>{updateDayInfo();hideResults()});
+$('inDest').addEventListener('change',()=>{updateDest();hideResults()});
+$('inHour').addEventListener('change',hideResults);
+$('inMin').addEventListener('change',hideResults);
+$('inCustom').addEventListener('input',hideResults);
+$('inSleep').addEventListener('input',()=>{$('sleepVal').textContent=parseFloat($('inSleep').value)+'h'});
+
+function updateDayInfo(){
+  const ds=$('inDate').value;
+  if(!ds)return;
+  const d=new Date(ds+'T12:00:00');
+  const str=d.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
+  $('dayInfo').textContent=str+' · '+dayLabel(dayType(ds));
+}
+
+function updateDest(){
+  const v=$('inDest').value;
+  const btn=$('btnCalc');
+  if(!v){
+    $('transportTag').innerHTML='';
+    $('customWrap').style.display='none';
+    btn.className='btn-calc disabled';
+    return;
+  }
+  btn.className='btn-calc active';
+  const[type,min]=v.split('|');
+  const isBus=type==='bus';
+  $('transportTag').innerHTML=`<div class="transport-tag ${type}"><span style="font-size:16px">${isBus?'🚌':'🚲'}</span>${isBus?'Haustür → Bus 35 → P+R → Auto → Ziel':'Fahrrad direkt ab Haustür'}</div>`;
+  if(parseInt(min)===0){
+    $('customWrap').style.display='block';
+    $('customLabel').textContent=isBus?'🚗 Fahrzeit ab P+R (Min)':'🚲 Fahrzeit ab Haustür (Min)';
+  }else{
+    $('customWrap').style.display='none';
+  }
+}
+
+function toggleReminder(){
+  reminderOn=!reminderOn;
+  const b=$('btnReminder');
+  b.textContent=reminderOn?'AN':'AUS';
+  b.className='btn-reminder '+(reminderOn?'on':'off');
+}
+
+function toggle(id){
+  const panel=$(id);
+  panel.classList.toggle('open');
+  $(id+'Arrow').textContent=panel.classList.contains('open')?'▲':'▼';
+}
+
+function hideResults(){$('results').classList.remove('show')}
+
+function card(label,time,sub,icon,hi,alarmDate,alarmLabel){
+  let alarm='';
+  if(alarmDate)alarm=alarmBtn(alarmDate,alarmLabel||label,false);
+  return `<div class="card${hi?' hi':''}"><div class="card-head"><div class="card-label">${icon} ${label}</div>${alarm}</div><div class="card-time">${time}</div>${sub?`<div class="card-sub">${sub}</div>`:''}</div>`;
+}
+
+function pill(status){
+  const cfg={ok:['ok','Guter Puffer'],knapp:['knapp','Knapp'],krit:['krit','Kritisch'],spaet:['krit','Zu spät!']};
+  const[cls,txt]=cfg[status]||cfg.krit;
+  return `<span class="pill ${cls}"><span class="pill-dot" style="background:currentColor"></span>${txt}</span>`;
+}
+
+// ── MAIN CALC ──
+function doCalc(){
+  const ds=$('inDate').value;
+  const v=$('inDest').value;
+  if(!v)return;
+
+  const[type,minStr]=v.split('|');
+  let travel=parseInt(minStr);
+  if(travel===0)travel=parseInt($('inCustom').value)||0;
+  if(travel<=0){alert('Bitte Fahrzeit eingeben.');return}
+
+  const hour=parseInt($('inHour').value);
+  const minute=parseInt($('inMin').value);
+  const sleepH=parseFloat($('inSleep').value);
+  const isBus=type==='bus';
+  const dType=dayType(ds);
+
+  const appt=new Date(ds+'T00:00:00');appt.setHours(hour,minute,0,0);
+
+  let leaveHome,arrive,busDep=null,allD=null,bufMin,reason;
+
+  if(isBus){
+    const maxBM=hour*60+minute-travel-BUSRIDE;
+    const found=findBus(dType,maxBM);
+    if(!found){alert('Keine Busverbindung an diesem Tag.');return}
+    busDep=found.dep;allD=found.all;
+    const busDate=new Date(appt);busDate.setHours(busDep.h,busDep.m,0,0);
+    leaveHome=new Date(busDate.getTime()-WALK*60000);
+    arrive=new Date(busDate.getTime()+(BUSRIDE+travel)*60000);
+    bufMin=Math.round((appt-arrive)/60000);
+    const maxH=Math.floor(maxBM/60),maxM=((maxBM%60)+60)%60;
+    reason=`Termin ${p(hour)}:${p(minute)} – ${travel} Min ab P+R – ${BUSRIDE} Min Bus → späteste Abfahrt ${p(maxH)}:${p(maxM)} → gewählt: ${p(busDep.h)}:${p(busDep.m)} (${Math.max(0,maxBM-busDep.t)} Min Reserve)`;
+  }else{
+    arrive=new Date(appt.getTime()-BIKEBUF*60000);
+    leaveHome=new Date(arrive.getTime()-travel*60000);
+    bufMin=BIKEBUF;
+    reason=`Termin ${p(hour)}:${p(minute)} – ${travel} Min Fahrrad – ${BIKEBUF} Min Puffer → los um ${ft(leaveHome)}`;
+  }
+
+  const wakeUp=new Date(leaveHome.getTime()-RTOTAL*60000);
+  const sleep=new Date(wakeUp.getTime()-sleepH*3600000);
+  const reminder=new Date(sleep.getTime()-60*60000);
+
+  // Timeline
+  const timeline=[];
+  let cur=new Date(wakeUp);
+  for(const s of ROUTINE){
+    const start=new Date(cur);
+    cur=new Date(cur.getTime()+s.m*60000);
+    timeline.push({...s,start,end:new Date(cur)});
+  }
+
+  const bs=bufMin>=10?'ok':bufMin>=5?'knapp':bufMin>=0?'krit':'spaet';
+
+  // ── Render ──
+  // Alarm bar
+  let ab=`<div class="alarm-bar-label">Wecker stellen:</div>`;
+  ab+=alarmBarBtn(sleep,'🌙','Schlafenszeit','Ab ins Bett — Morgenplaner');
+  if(reminderOn)ab+=alarmBarBtn(reminder,'💊','Reminder','Tablette nehmen — Morgenplaner');
+  ab+=alarmBarBtn(wakeUp,'⏰','Aufwachen','Aufwachen — Morgenplaner');
+  ab+=alarmBarBtn(leaveHome,'🚪','Los!','Haus verlassen — Morgenplaner');
+  $('alarmBar').innerHTML=ab;
+
+  // Row 1: Wecker + Haus verlassen
+  $('row1').innerHTML=
+    card('Wecker',ft(wakeUp),null,'⏰',true,wakeUp,'Aufwachen — Morgenplaner')+
+    card('Haus verlassen',ft(leaveHome),isBus?'→ 3 Min zur Haltestelle':`→ ${travel} Min Fahrrad`,'🚪',false,leaveHome,'Haus verlassen — Morgenplaner');
+
+  // Row 2: Bus/Arrival
+  if(isBus&&busDep){
+    $('row2').innerHTML=
+      card('Bus Alte Brücke',`${p(busDep.h)}:${p(busDep.m)}`,'Linie 35 → Hausackerweg','🚌',false)+
+      card('Ankunft Ziel',ft(arrive),`${pill(bs)} <span style="font-size:10px;color:rgba(255,255,255,0.25);margin-left:4px">${bufMin} Min</span>`,'📍',false);
+  }else{
+    $('row2').innerHTML=
+      card('Ankunft Ziel',ft(arrive),`${pill(bs)} <span style="font-size:10px;color:rgba(255,255,255,0.25);margin-left:4px">${bufMin} Min Puffer</span>`,'🚲',false);
+  }
+
+  // Row 3: Sleep + Reminder
+  let r3=card('Schlafenszeit',ft(sleep),`${sleepH}h Schlaf`,'🌙',false,sleep,'Ab ins Bett — Morgenplaner');
+  if(reminderOn)r3+=card('Abend-Reminder',ft(reminder),'60 Min vor Schlaf','💊',false,reminder,'Tablette nehmen — Morgenplaner');
+  $('row3').innerHTML=r3;
+
+  // Reasoning
+  $('reason').innerHTML=`<strong>Logik:</strong> ${reason}`;
+
+  // Routine
+  $('routineLabel').textContent=`☀️ Morgenroutine (${RTOTAL} Min)`;
+  let rhtml='';
+  timeline.forEach((s,i)=>{
+    rhtml+=`<div class="routine-row"><span class="routine-icon">${s.i}</span><div class="routine-info"><div class="routine-name">${s.l}</div><div class="routine-dur">${s.m} Min</div></div><span class="routine-time">${ft(s.start)}–${ft(s.end)}</span>${alarmBtn(s.start,s.l+' — Morgenplaner',false)}</div>`;
+  });
+  $('routine').innerHTML=rhtml;
+
+  // Bus schedule
+  if(isBus&&allD){
+    $('busSection').style.display='block';
+    $('schedLabel').textContent=`🚌 Fahrplan Linie 35 · ${dayLabel(dType)}`;
+    let sh='<div class="sched-grid">';
+    allD.forEach(d=>{
+      const sel=d.h===busDep.h&&d.m===busDep.m;
+      sh+=`<span class="sched-chip${sel?' sel':''}">${p(d.h)}:${p(d.m)}</span>`;
+    });
+    sh+='</div>';
+    $('schedule').innerHTML=sh;
+  }else{
+    $('busSection').style.display='none';
+  }
+
+  $('results').classList.add('show');
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
