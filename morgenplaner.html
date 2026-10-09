@@ -2,449 +2,773 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes">
+<meta name="theme-color" content="#F7F9FB">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0c0e14">
-<title>Morgenplaner — Fuchur e.V.</title>
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTW9yZ2VucGxhbmVyIiwic2hvcnRfbmFtZSI6Ik1vcmdlbnBsYW5lciIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGMwZTE0IiwidGhlbWVfY29sb3IiOiIjRTg4NDFBIn0=">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+<title>Morgenplaner</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0c0e14;--card:rgba(255,255,255,0.03);--border:rgba(255,255,255,0.07);--txt:#e8e9ed;--muted:rgba(255,255,255,0.3);--label:rgba(255,255,255,0.3);--accent:#E8841A;--accent-bg:rgba(232,132,26,0.10);--accent-border:rgba(232,132,26,0.35);--blue:#5BA4B8;--green:#6ee7b7}
-body{background:var(--bg);color:var(--txt);font-family:'DM Sans',-apple-system,sans-serif;min-height:100vh;max-width:480px;margin:0 auto;position:relative;overflow-x:hidden}
-.glow1{position:absolute;top:-120px;left:-80px;width:350px;height:350px;background:radial-gradient(circle,rgba(232,132,26,0.12) 0%,transparent 70%);pointer-events:none}
-.glow2{position:absolute;top:-60px;right:-100px;width:280px;height:280px;background:radial-gradient(circle,rgba(91,164,184,0.08) 0%,transparent 70%);pointer-events:none}
-.rel{position:relative;z-index:1}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--primary:#4E9DA5;--primary-dark:#3A7A82;--primary-light:#E4F2F4;--primary-50:#F0F8F9;
+--accent:#E8813A;--accent-light:#FFF2E8;
+--danger:#AD133A;--danger-light:#FDE8EE;
+--success:#4EA279;--success-light:#EBF7F1;
+--warning:#FFB020;--warning-light:#FFF8E8;
+--purple:#5F40D7;--purple-light:#F0ECFD;
+--blau:#01699A;--blau-light:#E5F2F8;
+--bg:#F7F9FB;--surface:#FFFFFF;
+--text:#1A202C;--text-sec:#5A6577;--text-muted:#8E99A8;
+--border:#DDE3EB;--border-light:#EDF1F5;
+--r:16px;--r-sm:10px;
+--shadow:0 2px 12px rgba(0,0,0,.06);--shadow-lg:0 8px 32px rgba(0,0,0,.08)
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+background:var(--bg);color:var(--text);padding:0 16px 80px;
+-webkit-tap-highlight-color:transparent;min-height:100vh}
 
-h1{font-family:'Outfit',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,#E8841A,#f0a84a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* ===== HEADER ===== */
+.hero{background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+border-radius:0 0 24px 24px;padding:28px 20px 22px;margin:0 -16px 20px;color:#fff;text-align:center}
+.hero h1{font-size:1.5rem;font-weight:800;letter-spacing:-.3px}
+.hero p{font-size:.82rem;opacity:.85;margin-top:4px}
 
-label.lbl{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--label);margin-bottom:6px;padding-left:2px}
-.inp{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--txt);font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;outline:none;-webkit-appearance:none;appearance:none}
-select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.inp:focus{border-color:rgba(232,132,26,0.4)}
+/* ===== CARDS ===== */
+.card{background:var(--surface);border:1.5px solid var(--border);
+border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);position:relative}
+.card h2{font-size:.75rem;font-weight:800;color:var(--text-muted);
+text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px;
+display:flex;align-items:center;gap:6px}
+.card h2 .ic{font-size:1rem}
 
-.transport-tag{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600}
-.transport-tag.bus{background:rgba(91,164,184,0.08);border:1px solid rgba(91,164,184,0.15);color:var(--blue)}
-.transport-tag.bike{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);color:var(--green)}
+/* Accent cards */
+.card-primary{border-color:var(--primary);border-left:4px solid var(--primary)}
+.card-primary h2{color:var(--primary)}
+.card-accent{border-color:var(--accent);border-left:4px solid var(--accent)}
+.card-accent h2{color:var(--accent)}
+.card-purple{border-color:var(--purple);border-left:4px solid var(--purple)}
+.card-purple h2{color:var(--purple)}
+.card-blau{border-color:var(--blau);border-left:4px solid var(--blau)}
+.card-blau h2{color:var(--blau)}
+.card-success{border-color:var(--success);border-left:4px solid var(--success)}
+.card-success h2{color:var(--success)}
 
-.time-row{display:flex;gap:8px;align-items:center}
-.time-row .colon{font-size:22px;font-weight:800;color:rgba(255,255,255,0.25)}
+/* ===== FORM ===== */
+label{display:block;font-size:.78rem;color:var(--text-sec);margin-bottom:4px;font-weight:600}
+select,input[type="date"],input[type="time"],input[type="number"]{
+width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--r-sm);
+background:var(--surface);color:var(--text);font-family:inherit;font-size:.95rem;
+-webkit-appearance:none;appearance:none;outline:none;margin-bottom:10px;transition:border-color .15s}
+select:focus,input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(78,157,165,.12)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238E99A8' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+background-repeat:no-repeat;background-position:right 14px center}
+input[type="number"]{width:100px;display:inline-block}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
 
-.settings-row{display:flex;gap:8px}
-.settings-row>div{flex:1}
-.range-wrap{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04)}
-.range-wrap input[type=range]{flex:1;accent-color:var(--accent)}
-.range-val{font-family:'DM Mono',monospace;font-weight:500;font-size:14px;min-width:28px}
+/* ===== TOGGLES ===== */
+.tog{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border-light)}
+.tog:last-child{border:none}
+.tog input[type="checkbox"]{width:20px;height:20px;accent-color:var(--primary);flex-shrink:0}
+.tog label{margin:0;color:var(--text);font-size:.88rem;font-weight:500}
 
-.btn-reminder{cursor:pointer;border-radius:12px;padding:12px 18px;font-weight:700;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid;transition:all .2s}
-.btn-reminder.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.btn-reminder.off{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.1);color:rgba(255,255,255,0.3)}
+/* ===== MODE BUTTONS ===== */
+.prow{display:flex;gap:8px;margin-bottom:10px}
+.pb{flex:1;padding:12px 8px;border:2px solid var(--border);border-radius:var(--r-sm);
+background:var(--surface);color:var(--text-sec);font-family:inherit;font-size:.88rem;
+font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.pb.on{border-color:var(--primary);color:var(--primary);background:var(--primary-light);font-weight:700}
+.pb:active{transform:scale(.97)}
 
-.btn-calc{width:100%;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;letter-spacing:.3px;cursor:pointer;transition:all .2s;margin-bottom:24px}
-.btn-calc.active{background:linear-gradient(135deg,#E8841A,#d4700e);color:#fff;box-shadow:0 4px 24px rgba(232,132,26,0.3)}
-.btn-calc.disabled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.2);cursor:not-allowed}
+/* ===== CALC BUTTON ===== */
+.cbtn{display:block;width:100%;padding:16px;border:none;border-radius:var(--r);
+font-size:1.05rem;font-weight:800;cursor:pointer;
+background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;margin-top:4px;
+box-shadow:0 4px 16px rgba(78,157,165,.3);transition:all .15s;letter-spacing:-.2px}
+.cbtn:active{transform:scale(.97);box-shadow:0 2px 8px rgba(78,157,165,.2)}
 
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(232,132,26,0.3),transparent);margin-bottom:20px}
+/* ===== RESULT ROWS ===== */
+.rr{display:flex;justify-content:space-between;align-items:center;
+padding:10px 0;border-bottom:1px solid var(--border-light);gap:8px}
+.rr:last-child{border:none}
+.rl{font-size:.82rem;color:var(--text-sec)}
+.rrt{display:flex;align-items:center;gap:6px}
+.rv{font-family:ui-monospace,SFMono-Regular,monospace;font-size:1rem;font-weight:600;color:var(--primary-dark)}
+.rv.w{color:var(--accent)}.rv.a{color:var(--danger)}
 
-/* Result Cards */
-.cards{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;flex:1;min-width:42%}
-.card.hi{background:var(--accent-bg);border:2px solid var(--accent)}
-.card-head{display:flex;justify-content:space-between;align-items:flex-start}
-.card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.35);margin-bottom:4px}
-.card-time{font-size:28px;font-weight:800;letter-spacing:-1px;font-family:'DM Mono',monospace;color:#f0f0f0}
-.card.hi .card-time{color:var(--accent)}
-.card-sub{font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px}
+/* ===== ALARM BUTTONS ===== */
+.al{display:inline-flex;align-items:center;gap:3px;padding:5px 10px;
+border:1.5px solid var(--primary);border-radius:8px;background:transparent;color:var(--primary);
+font-size:.74rem;text-decoration:none;white-space:nowrap;transition:all .15s;font-weight:600}
+.al:active{background:var(--primary);color:#fff}
 
-.pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px}
-.pill.ok{background:#064e3b;color:#6ee7b7}
-.pill.knapp{background:#713f12;color:#fde047}
-.pill.krit{background:#7f1d1d;color:#fca5a5}
-.pill-dot{width:5px;height:5px;border-radius:50%;display:inline-block}
+/* ===== WECKER CARD ===== */
+.wk-row{display:flex;align-items:center;justify-content:space-between;
+padding:14px 0;border-bottom:1px solid var(--border-light)}
+.wk-row:last-child{border:none}
+.wk-info{display:flex;align-items:center;gap:12px}
+.wk-num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+font-weight:800;font-size:.82rem;flex-shrink:0}
+.wk-1 .wk-num{background:var(--accent);color:#fff}
+.wk-2 .wk-num{background:var(--accent-light);color:var(--accent)}
+.wk-label{font-size:.82rem;color:var(--text-sec)}
+.wk-time{font-family:ui-monospace,SFMono-Regular,monospace;font-size:1.4rem;font-weight:700;color:var(--accent)}
+.wk-2 .wk-time{opacity:.8}
+.wk-btn{padding:8px 14px;border:1.5px solid var(--accent);border-radius:var(--r-sm);background:transparent;
+color:var(--accent);font-size:.78rem;text-decoration:none;display:inline-flex;align-items:center;gap:4px;
+transition:all .15s;font-family:inherit;font-weight:600}
+.wk-btn:active{background:var(--accent);color:#fff}
 
-/* Alarm buttons */
-.alarm-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;background:rgba(232,132,26,0.15);border:1px solid var(--accent-border);border-radius:8px;padding:5px 8px;cursor:pointer;color:var(--accent);font-size:11px;font-weight:700;font-family:'DM Sans',sans-serif;flex-shrink:0;text-decoration:none}
-.alarm-btn.wide{padding:6px 10px;gap:5px}
+/* ===== TIMELINE ROUTINE ===== */
+.tl{position:relative;padding-left:36px}
+.tl::before{content:'';position:absolute;left:14px;top:8px;bottom:8px;width:2px;
+background:linear-gradient(to bottom,var(--primary),var(--accent),var(--purple));border-radius:1px}
+.tl-item{position:relative;padding:8px 0;display:flex;align-items:flex-start;gap:10px}
+.tl-dot{position:absolute;left:-36px;top:12px;width:10px;height:10px;border-radius:50%;border:2.5px solid;
+background:var(--surface)}
+.tl-sleep .tl-dot{border-color:var(--purple)}
+.tl-body .tl-dot{border-color:var(--primary)}
+.tl-move .tl-dot{border-color:var(--accent)}
+.tl-misc .tl-dot{border-color:var(--blau)}
+.tl-go .tl-dot{border-color:var(--danger);background:var(--danger);width:12px;height:12px;left:-37px;top:11px}
+.tl-top{display:flex;align-items:center;gap:8px;width:100%}
+.tl-icon{font-size:1.05rem;width:24px;text-align:center}
+.tl-time{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.8rem;color:var(--primary-dark);min-width:42px;font-weight:600}
+.tl-name{flex:1;font-size:.86rem;font-weight:500}
+.tl-dur{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.72rem;color:var(--text-muted);
+padding:2px 8px;background:var(--bg);border-radius:6px;font-weight:600}
+.tl-bar{margin-top:4px;height:4px;border-radius:2px;background:var(--border-light)}
+.tl-bar-fill{height:100%;border-radius:2px}
+.tl-sleep .tl-bar-fill{background:linear-gradient(90deg,var(--purple),var(--purple-light))}
+.tl-body .tl-bar-fill{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.tl-move .tl-bar-fill{background:linear-gradient(90deg,var(--accent),var(--accent-light))}
+.tl-misc .tl-bar-fill{background:linear-gradient(90deg,var(--blau),var(--blau-light))}
+.tl-go-row{position:relative;padding:12px 0 4px;display:flex;align-items:center;gap:10px;justify-content:space-between}
 
-.alarm-bar{display:flex;gap:6px;margin-bottom:16px;padding:12px 14px;background:rgba(232,132,26,0.06);border:1px solid rgba(232,132,26,0.15);border-radius:14px;flex-wrap:wrap;align-items:center}
-.alarm-bar-label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);margin-right:4px;width:100%;margin-bottom:2px}
+/* ===== ALTERNATIVES TABLE ===== */
+.at-row{display:flex;align-items:center;padding:9px 8px;font-size:.84rem;
+border-bottom:1px solid var(--border-light);gap:8px;border-radius:8px;cursor:pointer;transition:all .12s}
+.at-row:last-child{border:none}
+.at-row:hover{background:var(--primary-50)}
+.at-row:active{background:var(--primary-light)}
+.at-line{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.76rem;padding:3px 8px;border-radius:6px;
+min-width:40px;text-align:center;font-weight:700}
+.at-line.l35{background:var(--primary-light);color:var(--primary-dark)}
+.at-line.l735{background:var(--accent-light);color:var(--accent)}
+.at-dep{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.9rem;color:var(--text);min-width:44px;font-weight:600}
+.at-hw{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.82rem;color:var(--text-sec)}
+.at-sel{background:var(--primary-light) !important;border-left:3px solid var(--primary);cursor:default}
+.at-sel:hover{background:var(--primary-light) !important}
+.at-arrow{color:var(--text-muted);font-size:.72rem}
+.at-pick{font-size:.7rem;color:var(--primary);font-weight:700;margin-left:auto;white-space:nowrap}
+.at-choose{font-size:.7rem;color:var(--text-muted);margin-left:auto;opacity:0;transition:opacity .12s;white-space:nowrap}
+.at-row:hover .at-choose{opacity:1}
 
-/* Reasoning */
-.reason{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6}
-.reason strong{color:rgba(255,255,255,0.55)}
+.note{font-size:.76rem;color:var(--text-muted);margin-top:8px;line-height:1.5}
+.badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:.72rem;
+font-weight:700;margin-left:4px;white-space:nowrap}
+.b1{background:var(--success-light);color:var(--success)}
+.b2{background:var(--warning-light);color:#7A5200}
+.b3{background:var(--danger-light);color:var(--danger)}
 
-/* Toggle sections */
-.toggle-btn{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:13px 16px;cursor:pointer;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.toggle-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:6px 14px;margin-bottom:10px;display:none}
-.toggle-panel.open{display:block}
+/* ===== SECTION DIVIDER ===== */
+.sec-div{display:flex;align-items:center;gap:12px;margin:20px 0 6px}
+.sec-div-line{flex:1;height:1px;background:var(--border)}
+.sec-div-label{font-size:.72rem;font-weight:800;color:var(--text-muted);
+text-transform:uppercase;letter-spacing:1.5px;white-space:nowrap}
 
-.routine-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
-.routine-row:last-child{border-bottom:none}
-.routine-icon{font-size:18px;width:28px;text-align:center}
-.routine-info{flex:1}
-.routine-name{font-weight:600;font-size:13px}
-.routine-dur{font-size:10px;color:rgba(255,255,255,0.25)}
-.routine-time{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--accent);margin-right:6px}
-
-.sched-grid{display:flex;flex-wrap:wrap;gap:4px}
-.sched-chip{font-family:'DM Mono',monospace;font-size:11px;padding:4px 7px;border-radius:6px;background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.06)}
-.sched-chip.sel{background:var(--accent);color:#fff;font-weight:700;border-color:var(--accent)}
-
-.footer{margin-top:30px;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.04);font-size:10px;color:rgba(255,255,255,0.18);text-align:center;line-height:1.6}
-
-@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.fade-up{animation:fu .4s ease-out}
-
-#results{display:none}
-#results.show{display:block}
+/* ===== HEIMWEG ===== */
+.hw-btn{display:block;width:100%;padding:14px;border:2px solid var(--blau);border-radius:var(--r);
+font-size:.95rem;font-weight:700;cursor:pointer;background:var(--blau-light);color:var(--blau);
+margin-top:14px;text-align:center;transition:all .15s;font-family:inherit}
+.hw-btn:active{background:var(--blau);color:#fff;transform:scale(.97)}
+.hw-row{display:flex;align-items:center;padding:10px 8px;font-size:.84rem;
+border-bottom:1px solid var(--border-light);gap:8px;border-radius:8px}
+.hw-row:last-child{border:none}
+.hw-gone{opacity:.45}
+.hw-next{background:var(--blau-light);border-left:3px solid var(--blau)}
+.hw-line{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.76rem;padding:3px 8px;border-radius:6px;
+min-width:36px;text-align:center;font-weight:700}
+.hw-line.hl35{background:var(--primary-light);color:var(--primary-dark)}
+.hw-line.hl36{background:var(--purple-light);color:var(--purple)}
+.hw-line.hl14{background:var(--danger-light);color:var(--danger)}
+.hw-dep{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.9rem;color:var(--text);min-width:44px;font-weight:600}
+.hw-dest{font-size:.78rem;color:var(--text-sec);flex:1}
+.hw-wait{font-size:.72rem;color:var(--text-muted);white-space:nowrap;font-weight:600}
 </style>
 </head>
 <body>
-<div class="glow1"></div>
-<div class="glow2"></div>
 
-<!-- HEADER -->
-<div class="rel" style="padding:24px 20px 16px">
-  <div style="display:flex;align-items:center;gap:10px">
-    <span style="font-size:28px">🐉</span>
-    <div>
-      <h1>Morgenplaner</h1>
-      <p style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;letter-spacing:.5px">Fuchur e.V. · Linie 35 · Rückwärtsrechnung</p>
-    </div>
-  </div>
+<div class="hero">
+<h1>&#9749; Morgenplaner</h1>
+<p>R&#252;ckw&#228;rts planen, p&#252;nktlich ankommen</p>
 </div>
 
-<!-- INPUTS -->
-<div class="rel" style="padding:0 16px">
-
-  <div style="margin-bottom:12px">
-    <label class="lbl">📅 Datum</label>
-    <input type="date" id="inDate" class="inp">
-    <div id="dayInfo" style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px;padding-left:2px"></div>
-  </div>
-
-  <div style="margin-bottom:12px">
-    <label class="lbl">📍 Wohin?</label>
-    <select id="inDest" class="inp">
-      <option value="">— Ziel wählen —</option>
-      <optgroup label="🚌 P+R (Bus Linie 35)">
-        <option value="bus|21">Büro Neckargemünd (21 Min)</option>
-        <option value="bus|45">Neckarbischofsheim (45 Min)</option>
-        <option value="bus|26">Schönau (26 Min)</option>
-        <option value="bus|43">Sinsheim (43 Min)</option>
-        <option value="bus|42">Eberbach (42 Min)</option>
-        <option value="bus|35">Baiertal (35 Min)</option>
-        <option value="bus|38">Dielheim (38 Min)</option>
-        <option value="bus|25">Dilsberg (25 Min)</option>
-        <option value="bus|0">P+R individuell…</option>
-      </optgroup>
-      <optgroup label="🚲 Fahrrad ab Haustür">
-        <option value="bike|24">Heidelberg Hbf (24 Min)</option>
-        <option value="bike|20">Ramsperger (20 Min)</option>
-        <option value="bike|16">Hartmann (16 Min)</option>
-        <option value="bike|20">Dr. Wang (20 Min)</option>
-        <option value="bike|15">Bismarckplatz (15 Min)</option>
-        <option value="bike|12">S-Bhf HD-Altstadt (12 Min)</option>
-        <option value="bike|16">KJP Ambulanz (16 Min)</option>
-        <option value="bike|15">STEP Station (15 Min)</option>
-        <option value="bike|0">Fahrrad individuell…</option>
-      </optgroup>
-    </select>
-    <div id="transportTag"></div>
-  </div>
-
-  <div id="customWrap" style="margin-bottom:12px;display:none">
-    <label class="lbl" id="customLabel">🚗 Fahrzeit (Min)</label>
-    <input type="number" id="inCustom" class="inp" min="1" max="120" value="20" placeholder="z.B. 25">
-  </div>
-
-  <div style="margin-bottom:12px">
-    <label class="lbl">⏰ Ich muss da sein um</label>
-    <div class="time-row">
-      <select id="inHour" class="inp" style="flex:1;text-align:center"></select>
-      <span class="colon">:</span>
-      <select id="inMin" class="inp" style="flex:1;text-align:center"></select>
-    </div>
-  </div>
-
-  <div class="settings-row" style="margin-bottom:18px">
-    <div>
-      <label class="lbl">😴 Schlaf</label>
-      <div class="range-wrap">
-        <input type="range" id="inSleep" min="6" max="10" step="0.5" value="9">
-        <span class="range-val" id="sleepVal">9h</span>
-      </div>
-    </div>
-    <div>
-      <label class="lbl">💊 Reminder</label>
-      <button class="btn-reminder on" id="btnReminder" onclick="toggleReminder()">AN</button>
-    </div>
-  </div>
-
-  <button class="btn-calc disabled" id="btnCalc" onclick="doCalc()">Berechnen</button>
+<!-- TRANSPORT -->
+<div class="card">
+<h2><span class="ic">&#128652;</span> Transportmittel</h2>
+<div class="prow">
+<button type="button" class="pb on" id="mBus" onclick="setMode('bus')">&#128652; P+R Bus</button>
+<button type="button" class="pb" id="mBike" onclick="setMode('bike')">&#128690; Fahrrad</button>
+</div>
+<div id="depWrap">
+<h2 style="margin-top:4px"><span class="ic">&#128207;</span> Einstieg</h2>
+<div class="prow">
+<button type="button" class="pb on" id="dAB" onclick="setDep('ab')">Alte Br&#252;cke</button>
+<button type="button" class="pb" id="dMS" onclick="setDep('ms')">Marstallstr.</button>
+</div>
+</div>
 </div>
 
-<!-- RESULTS -->
-<div class="rel fade-up" style="padding:0 16px" id="results">
-  <div class="divider"></div>
-
-  <div class="alarm-bar" id="alarmBar"></div>
-
-  <div class="cards" id="row1"></div>
-  <div class="cards" id="row2"></div>
-  <div class="cards" id="row3"></div>
-
-  <div class="reason" id="reason"></div>
-
-  <button class="toggle-btn" onclick="toggle('routine')">
-    <span id="routineLabel">☀️ Morgenroutine (72 Min)</span>
-    <span id="routineArrow" style="color:rgba(255,255,255,0.25);font-size:12px">▼</span>
-  </button>
-  <div class="toggle-panel" id="routine"></div>
-
-  <div id="busSection">
-    <button class="toggle-btn" onclick="toggle('schedule')">
-      <span id="schedLabel">🚌 Fahrplan Linie 35</span>
-      <span id="schedArrow" style="color:rgba(255,255,255,0.25);font-size:12px">▼</span>
-    </button>
-    <div class="toggle-panel" id="schedule"></div>
-  </div>
+<!-- ZIEL -->
+<div class="card">
+<h2><span class="ic">&#127919;</span> Ziel &amp; Termin</h2>
+<select id="dest" onchange="chkCust()"></select>
+<div id="custW" style="display:none">
+<label>Fahrzeit in Minuten</label>
+<input type="number" id="custM" min="1" max="180" value="20">
+</div>
+<div class="row" style="margin-top:4px">
+<div><label>Datum</label><input type="date" id="iDate"></div>
+<div><label>Ankunft bis</label><input type="time" id="iTime" value="08:00"></div>
+</div>
 </div>
 
-<div class="footer rel">
-  rnv Linie 35 · Gültig ab 23.06.2025 · Angaben ohne Gewähr<br>Morgenplaner v3 · Fuchur e.V.
+<!-- OPTIONEN -->
+<div class="card">
+<h2><span class="ic">&#9881;&#65039;</span> Optionen</h2>
+<div class="tog"><input type="checkbox" id="oYoga"><label for="oYoga">&#129496; Yoga &amp; Meditation (+23 Min)</label></div>
+<div class="tog"><input type="checkbox" id="oLilly"><label for="oLilly">&#128054; Lilly ins B&#252;ro (+8 Min)</label></div>
+<div class="tog"><input type="checkbox" id="oMed" checked><label for="oMed">&#128138; Medikation (60 Min vor Schlaf)</label></div>
+</div>
+
+<button type="button" class="cbtn" onclick="doCalc()">&#9889; Berechnen</button>
+
+<!-- ERGEBNIS -->
+<div id="RES" style="display:none">
+
+<div class="sec-div"><div class="sec-div-line"></div><span class="sec-div-label">Ergebnis</span><div class="sec-div-line"></div></div>
+
+<div class="card card-accent" id="cWeck"><h2><span class="ic">&#9200;</span> Wecker</h2><div id="oWeck"></div></div>
+<div class="card card-purple" id="cAbend"><h2><span class="ic">&#127769;</span> Abend vorher</h2><div id="oAbend"></div></div>
+<div class="card card-primary"><h2><span class="ic">&#9201;</span> Morgenroutine</h2><div id="oRout"></div></div>
+<div class="card card-blau" id="cVerb" style="display:none"><div id="oVerb"></div></div>
+<div class="card card-success" id="cAlt" style="display:none"><h2><span class="ic">&#128260;</span> Alternative Abfahrten</h2><p class="note" style="margin:-4px 0 10px">Tippe auf eine Verbindung, um alles neu zu berechnen</p><div id="oAlt"></div></div>
+</div>
+
+<!-- HEIMWEG -->
+<button type="button" class="hw-btn" onclick="doHeim()">&#128671; Heimwegplanung</button>
+<div id="HEIM" style="display:none">
+<div class="sec-div"><div class="sec-div-line"></div><span class="sec-div-label">Heimweg</span><div class="sec-div-line"></div></div>
+<div class="card card-blau" id="cHeim"><h2><span class="ic">&#128671;</span> Nächste Busse ab Hausackerweg</h2><p class="note" style="margin:-4px 0 8px">Richtung Marstallstraße / Alte Brücke</p><div id="oHeim"></div></div>
 </div>
 
 <script>
-// ── BUS SCHEDULE ──
-const BUS={
-weekday:[[4,[26,56]],[5,[16,36,56]],[6,[16,36,56]],[7,[16,36,56]],[8,[16,36,56]],[9,[16,36,56]],[10,[16,36,56]],[11,[16,36,56]],[12,[16,36,56]],[13,[16,26,36,56]],[14,[16,36,56]],[15,[16,36,56]],[16,[16,36,56]],[17,[16,36,56]],[18,[16,36,56]],[19,[16,36,56]],[20,[16,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]],
-saturday:[[5,[2,32]],[6,[2,32]],[7,[2,32]],[8,[2,22,32,56]],[9,[16,36,56]],[10,[16,36,56]],[11,[16,36,56]],[12,[16,36,56]],[13,[16,36,56]],[14,[16,36,56]],[15,[16,36,56]],[16,[16,36,56]],[17,[16,36,56]],[18,[16,36,56]],[19,[16,36,56]],[20,[16,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]],
-sunday:[[7,[32]],[8,[32]],[9,[32]],[10,[32]],[11,[32]],[12,[2,32]],[13,[2,32]],[14,[2,32]],[15,[2,32]],[16,[2,32]],[17,[2,32]],[18,[2,32]],[19,[2,32]],[20,[2,32]],[21,[32]],[22,[32]],[23,[32]],[0,[2]]]
-};
-const WALK=3,BUSRIDE=6,BUFFER=5,BIKEBUF=5;
-const ROUTINE=[
-{l:"Snooze / Wachwerden",m:20,i:"😴"},
-{l:"Gassi mit Lilly",m:15,i:"🐕"},
-{l:"Kaffee & Frühstück",m:10,i:"☕"},
-{l:"Bad-Routine",m:12,i:"🚿"},
-{l:"Tasche & Schlüssel",m:5,i:"🎒"},
-{l:"Puffer",m:10,i:"⏳"}
-];
-const RTOTAL=ROUTINE.reduce((s,r)=>s+r.m,0);
+/* ===== DATA ===== */
+var DBUS=[
+{n:"Büro Neckargemünd",m:21},{n:"Neckarbischofsheim",m:45},{n:"Schönau",m:26},
+{n:"Sinsheim",m:43},{n:"Eberbach",m:42},{n:"Baiertal",m:35},{n:"Dielheim",m:38},
+{n:"Dilsberg",m:25},{n:"Mauer",m:25},{n:"Lobbach / Waldwimmersbach",m:30},
+{n:"P+R individuell",m:0}];
+var DBIK=[
+{n:"HD Hbf",m:24},{n:"Selfcaretermin Weststadt",m:20},{n:"Hartmann",m:16},
+{n:"Dr. Wang",m:20},{n:"Bismarckplatz",m:15},{n:"S-Bhf HD-Altstadt",m:12},
+{n:"KJP Ambulanz",m:16},{n:"STEP Station",m:15},{n:"Susanne",m:15},{n:"Jakob",m:25},
+{n:"Fahrrad individuell",m:0}];
 
-// ── Helpers ──
-const p=n=>String(n).padStart(2,'0');
-const ft=d=>`${p(d.getHours())}:${p(d.getMinutes())}`;
-function dayType(ds){const d=new Date(ds+'T12:00:00').getDay();return d===0?'sunday':d===6?'saturday':'weekday'}
-function dayLabel(t){return{weekday:'Werktag',saturday:'Samstag',sunday:'Sonn-/Feiertag'}[t]}
-function allDeps(t){const o=[];for(const[h,ms]of BUS[t])for(const m of ms)o.push({h,m,t:h*60+m});return o.sort((a,b)=>a.t-b.t)}
-function findBus(t,mx){const d=allDeps(t);for(let i=d.length-1;i>=0;i--)if(d[i].t<=mx)return{dep:d[i],all:d};return d.length?{dep:d[0],all:d}:null}
+/* Linie 35 ab Alte Bruecke - gueltig ab 28.09.2026 */
+var BUS35={
+w:{4:[24,54],5:[14,34,54],6:[14,34,54],7:[14,34,54],8:[14,34,54],9:[14,34,54],
+10:[14,34,54],11:[14,34,54],12:[14,34,54],13:[14,34,54],14:[14,34,54],15:[14,34,54],
+16:[14,34,54],17:[14,34,54],18:[14,34,54],19:[14,34,54],20:[14,32],21:[32],22:[32],23:[32],0:[2]},
+s:{5:[2,32],6:[2,32],7:[2,32],8:[2,22,32,54],9:[14,34,54],10:[14,34,54],11:[14,34,54],
+12:[14,34,54],13:[14,34,54],14:[14,34,54],15:[14,34,54],16:[14,34,54],17:[14,34,54],
+18:[14,34,54],19:[14,34,54],20:[14,32],21:[32],22:[32],23:[32],0:[2]},
+u:{7:[32],8:[32],9:[32],10:[32],11:[32],12:[2,32],13:[2,32],14:[2,32],15:[2,32],
+16:[2,32],17:[2,32],18:[2,32],19:[2,32],20:[2,32],21:[32],22:[32],23:[32],0:[2]}};
 
-// ── Alarm ──
-function setAlarm(h,m,label){
-  const url=`intent:#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR=${h};i.android.intent.extra.alarm.MINUTES=${m};S.android.intent.extra.alarm.MESSAGE=${encodeURIComponent(label)};B.android.intent.extra.alarm.SKIP_UI=false;end`;
-  window.location.href=url;
+/* Linie 735 ab Alte Bruecke - gueltig ab 14.12.2025 (aelterer Fahrplan) */
+var BUS735={
+w:{5:[37],6:[20],7:[55],8:[55],10:[55],11:[33,55],12:[25],13:[35,55],14:[25],15:[15,55],16:[25,47],17:[25,47],18:[55],20:[25]},
+s:{5:[55],6:[55],7:[55],9:[55],10:[55],12:[55],14:[55],15:[55],16:[55],17:[55],18:[55]},
+u:{9:[47],11:[47],13:[47],15:[47],17:[47]}};
+
+/* Linie 35 Rueckfahrt ab Hausackerweg - gueltig ab 28.09.2026 */
+var R35={
+w:{5:[21,51],6:[21,41],7:[1,21,41],8:[1,21,41],9:[1,21,41],
+10:[1,21,41],11:[1,21,41],12:[1,21,41],13:[1,21,41],14:[1,21,41],15:[1,21,41],
+16:[1,21,41],17:[1,21,41],18:[1,21,41],19:[1,21,41],20:[1,21,41,58],21:[28],22:[28],23:[28],0:[28,58]},
+s:{5:[58],6:[28,58],7:[28,58],8:[28,58],9:[21,41],10:[1,21,41],11:[1,21,41],
+12:[1,21,41],13:[1,21,41],14:[1,21,41],15:[1,21,41],16:[1,21,41],17:[1,21,41],
+18:[1,21,41],19:[1,21,41],20:[1,21,41,58],21:[28],22:[28],23:[28],0:[28,58]},
+u:{8:[28],9:[28],10:[28],11:[28],12:[28,58],13:[28,58],14:[28,58],15:[28,58],
+16:[28,58],17:[28,58],18:[28,58],19:[28,58],20:[28,58],21:[28],22:[28],23:[28],0:[28,58]}};
+
+/* Linie 36 Rueckfahrt ab Hausackerweg - gueltig ab 14.09.2026 */
+var R36={
+w:{6:[11,31,51],7:[11,31,51],8:[11,31,51],9:[11,31,51],
+10:[11,31,51],11:[11,31,51],12:[11,31,51],13:[11,31,51],14:[11,31,51],15:[11,31,51],
+16:[11,31,51],17:[11,31,51],18:[11,31,51],19:[11,31,51],20:[11,31,51],21:[10,40],22:[10,40],23:[10,40],0:[10,40]},
+s:{6:[10,40],7:[10,40],8:[10,40],9:[11,31,51],10:[11,31,51],11:[11,31,51],
+12:[11,31,51],13:[11,31,51],14:[11,31,51],15:[11,31,51],16:[11,31,51],17:[11,31,51],
+18:[11,31,51],19:[11,31,51],20:[11,31,51],21:[10,40],22:[10,40],23:[10,40],0:[10,40]},
+u:{7:[10,40],8:[10,40],9:[10,40],10:[10,40],11:[10,40],12:[10,40],13:[10,40],14:[10,40],
+15:[10,40],16:[10,40],17:[10,40],18:[10,40],19:[10,40],20:[10,40],21:[10,40],22:[10,40],23:[10,40],0:[10,40]}};
+
+/* Linie 14 Rueckfahrt ab Hausackerweg - Nachtbus - gueltig ab 14.12.2025 */
+var R14={
+w:{0:[25,55],1:[25],2:[25]},
+s:{0:[25,55],1:[25],2:[25]},
+u:{0:[25,55],1:[25],2:[25]}};
+
+/* Fahrzeit Hausackerweg → Alte Bruecke ~5min, → Marstallstr ~7min (L35), ~6min (L36) */
+var RD_AB=5,RD_MS_35=7,RD_MS_36=6,RD_BP=12;
+
+var WAB=3,WMS=5,RAB=6,RMS=4,BUF=5,BBUF=5,SH=9;
+var MSO35=2,MSO735=-1;
+var MODE="bus",DEP="ab";
+
+/* ===== HELPERS ===== */
+function fm(m){while(m<0)m+=1440;m=m%1440;
+return(Math.floor(m/60)<10?"0":"")+Math.floor(m/60)+":"+(m%60<10?"0":"")+(m%60)}
+function gid(x){return document.getElementById(x)}
+
+/* ===== MODE / DEP ===== */
+function setMode(v){
+MODE=v;
+gid("mBus").className="pb"+(v==="bus"?" on":"");
+gid("mBike").className="pb"+(v==="bike"?" on":"");
+gid("depWrap").style.display=v==="bus"?"block":"none";
+fillD();
 }
-function alarmBtn(date,label,wide){
-  const h=date.getHours(),m=date.getMinutes();
-  return `<a class="alarm-btn${wide?' wide':''}" href="javascript:void(0)" onclick="setAlarm(${h},${m},'${label.replace(/'/g,"\\'")}')">⏰${wide?' Wecker':''}</a>`;
-}
-function alarmBarBtn(date,emoji,shortLabel,fullLabel){
-  const h=date.getHours(),m=date.getMinutes();
-  return `<a class="alarm-btn wide" href="javascript:void(0)" onclick="setAlarm(${h},${m},'${fullLabel.replace(/'/g,"\\'")}')"">${emoji} ${shortLabel} ${ft(date)}</a>`;
-}
-
-// ── Init ──
-const $=id=>document.getElementById(id);
-let reminderOn=true;
-
-// Date default = tomorrow
-const tom=new Date();tom.setDate(tom.getDate()+1);
-$('inDate').value=tom.toISOString().slice(0,10);
-updateDayInfo();
-
-// Hour/Min selects
-for(let i=0;i<24;i++)$('inHour').innerHTML+=`<option value="${i}"${i===9?' selected':''}>${p(i)}</option>`;
-for(const m of[0,5,10,15,20,25,30,35,40,45,50,55])$('inMin').innerHTML+=`<option value="${m}">${p(m)}</option>`;
-
-// Events
-$('inDate').addEventListener('change',()=>{updateDayInfo();hideResults()});
-$('inDest').addEventListener('change',()=>{updateDest();hideResults()});
-$('inHour').addEventListener('change',hideResults);
-$('inMin').addEventListener('change',hideResults);
-$('inCustom').addEventListener('input',hideResults);
-$('inSleep').addEventListener('input',()=>{$('sleepVal').textContent=parseFloat($('inSleep').value)+'h'});
-
-function updateDayInfo(){
-  const ds=$('inDate').value;
-  if(!ds)return;
-  const d=new Date(ds+'T12:00:00');
-  const str=d.toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
-  $('dayInfo').textContent=str+' · '+dayLabel(dayType(ds));
-}
-
-function updateDest(){
-  const v=$('inDest').value;
-  const btn=$('btnCalc');
-  if(!v){
-    $('transportTag').innerHTML='';
-    $('customWrap').style.display='none';
-    btn.className='btn-calc disabled';
-    return;
-  }
-  btn.className='btn-calc active';
-  const[type,min]=v.split('|');
-  const isBus=type==='bus';
-  $('transportTag').innerHTML=`<div class="transport-tag ${type}"><span style="font-size:16px">${isBus?'🚌':'🚲'}</span>${isBus?'Haustür → Bus 35 → P+R → Auto → Ziel':'Fahrrad direkt ab Haustür'}</div>`;
-  if(parseInt(min)===0){
-    $('customWrap').style.display='block';
-    $('customLabel').textContent=isBus?'🚗 Fahrzeit ab P+R (Min)':'🚲 Fahrzeit ab Haustür (Min)';
-  }else{
-    $('customWrap').style.display='none';
-  }
+function setDep(v){
+DEP=v;
+gid("dAB").className="pb"+(v==="ab"?" on":"");
+gid("dMS").className="pb"+(v==="ms"?" on":"");
 }
 
-function toggleReminder(){
-  reminderOn=!reminderOn;
-  const b=$('btnReminder');
-  b.textContent=reminderOn?'AN':'AUS';
-  b.className='btn-reminder '+(reminderOn?'on':'off');
+/* ===== DESTINATIONS ===== */
+function fillD(){
+var s=gid("dest"),li=MODE==="bus"?DBUS:DBIK,h="";
+for(var i=0;i<li.length;i++){
+h+="<option value='"+i+"'>"+(li[i].m?li[i].n+" ("+li[i].m+" Min)":li[i].n)+"</option>";}
+s.innerHTML=h;chkCust();
+}
+function chkCust(){
+var li=MODE==="bus"?DBUS:DBIK,ix=parseInt(gid("dest").value);
+gid("custW").style.display=(li[ix]&&li[ix].m===0)?"block":"none";
 }
 
-function toggle(id){
-  const panel=$(id);
-  panel.classList.toggle('open');
-  $(id+'Arrow').textContent=panel.classList.contains('open')?'▲':'▼';
+/* ===== HOLIDAYS BW ===== */
+function hols(y){
+var h=[y+"-01-01",y+"-01-06",y+"-05-01",y+"-10-03",y+"-11-01",y+"-12-25",y+"-12-26"];
+var a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4;
+var f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),x=(19*a+b-d-g+15)%30;
+var i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-x-k)%7;
+var mm=Math.floor((a+11*x+22*l)/451);
+var mon=Math.floor((x+l-7*mm+114)/31),day=((x+l-7*mm+114)%31)+1;
+var ea=new Date(y,mon-1,day);
+function ad(t,n){var r=new Date(t.getTime());r.setDate(r.getDate()+n);return r}
+function ft(t){return t.getFullYear()+"-"+(t.getMonth()+1<10?"0":"")+(t.getMonth()+1)+"-"+(t.getDate()<10?"0":"")+t.getDate()}
+h.push(ft(ad(ea,-2)),ft(ad(ea,1)),ft(ad(ea,39)),ft(ad(ea,50)),ft(ad(ea,60)));
+return h;
+}
+function dtyp(ds){
+var d=new Date(ds+"T12:00:00"),w=d.getDay(),hl=hols(d.getFullYear());
+for(var i=0;i<hl.length;i++){if(hl[i]===ds)return"u";}
+return w===0?"u":w===6?"s":"w";
 }
 
-function hideResults(){$('results').classList.remove('show')}
-
-function card(label,time,sub,icon,hi,alarmDate,alarmLabel){
-  let alarm='';
-  if(alarmDate)alarm=alarmBtn(alarmDate,alarmLabel||label,false);
-  return `<div class="card${hi?' hi':''}"><div class="card-head"><div class="card-label">${icon} ${label}</div>${alarm}</div><div class="card-time">${time}</div>${sub?`<div class="card-sub">${sub}</div>`:''}</div>`;
+/* ===== FIND BUS BY DEPARTURE MINUTE ===== */
+function fbusByDp(dp,line){
+var wk=DEP==="ab"?WAB:WMS;
+return{dp:dp,lv:dp-wk,hw:dp+RAB-(DEP==="ab"?0:(line==="35"?MSO35:MSO735))+RAB,
+lb:DEP==="ab"?"Alte Brücke":"Marstallstraße",line:line};
 }
 
-function pill(status){
-  const cfg={ok:['ok','Guter Puffer'],knapp:['knapp','Knapp'],krit:['krit','Kritisch'],spaet:['krit','Zu spät!']};
-  const[cls,txt]=cfg[status]||cfg.krit;
-  return `<span class="pill ${cls}"><span class="pill-dot" style="background:currentColor"></span>${txt}</span>`;
+/* ===== FIND BEST BUS (Linie 35) ===== */
+function fbus(maxD,dt){
+var sc=BUS35[dt];if(!sc)return null;
+var wk=DEP==="ab"?WAB:WMS;
+var rd=DEP==="ab"?RAB:RMS;
+var off=DEP==="ab"?0:MSO35;
+var all=[];
+for(var h in sc){if(!sc.hasOwnProperty(h))continue;
+var hr=parseInt(h),ms=sc[h];
+for(var j=0;j<ms.length;j++){var ab=hr*60+ms[j];all.push({ab:ab,dp:ab+off});}}
+all.sort(function(a,b){return a.dp-b.dp});
+var best=null;
+for(var i=all.length-1;i>=0;i--){if(all[i].dp<=maxD){best=all[i];break;}}
+var tight=false;
+if(!best){tight=true;
+for(var i2=0;i2<all.length;i2++){if(all[i2].dp>=240){best=all[i2];break;}}
+if(!best&&all.length)best=all[0];}
+if(!best)return null;
+return{dp:best.dp,ab:best.ab,lv:best.dp-wk,hw:best.ab+RAB,
+lb:DEP==="ab"?"Alte Brücke":"Marstallstraße",tight:tight,
+buf:tight?0:maxD-best.dp,line:"35"};
 }
 
-// ── MAIN CALC ──
+/* ===== ALL DEPARTURES ===== */
+function getAllDeps(dt){
+var res=[];
+var off35=DEP==="ab"?0:MSO35;
+var off735=DEP==="ab"?0:MSO735;
+var sc35=BUS35[dt];
+if(sc35){for(var h in sc35){if(!sc35.hasOwnProperty(h))continue;
+var hr=parseInt(h);for(var j=0;j<sc35[h].length;j++){
+var ab=hr*60+sc35[h][j];res.push({line:"35",dp:ab+off35,hw:ab+RAB});}}}
+var sc735=BUS735[dt];
+if(sc735){for(var h in sc735){if(!sc735.hasOwnProperty(h))continue;
+var hr=parseInt(h);for(var j=0;j<sc735[h].length;j++){
+var ab=hr*60+sc735[h][j];res.push({line:"735",dp:ab+off735,hw:ab+RAB});}}}
+res.sort(function(a,b){return a.dp-b.dp});
+return res;
+}
+
+/* ===== ALARM ===== */
+function alink(md,lb){while(md<0)md+=1440;md%=1440;
+var h=Math.floor(md/60),m=md%60;
+return"intent://#Intent;action=android.intent.action.SET_ALARM;i.android.intent.extra.alarm.HOUR="+h+";i.android.intent.extra.alarm.MINUTES="+m+";S.android.intent.extra.alarm.MESSAGE="+encodeURIComponent(lb)+";B.android.intent.extra.alarm.SKIP_UI=false;end";}
+
+function abtn(md,lb){return' <a class="al" href="'+alink(md,lb)+'">&#9200;</a>';}
+
+/* ===== ROW BUILDERS ===== */
+function rw(l,v){return'<div class="rr"><span class="rl">'+l+'</span><span class="rv">'+v+'</span></div>';}
+function rwA(l,v,md,al,c){return'<div class="rr"><span class="rl">'+l+'</span><div class="rrt"><span class="rv '+(c||"")+'">'+v+'</span>'+abtn(md,al)+'</div></div>';}
+
+/* ===== TIMELINE ITEM ===== */
+function tlItem(cls,icon,time,name,dur,maxDur){
+var pct=Math.round((dur/maxDur)*100);
+return'<div class="tl-item '+cls+'"><div class="tl-dot"></div>'+
+'<div style="flex:1"><div class="tl-top"><span class="tl-icon">'+icon+'</span>'+
+'<span class="tl-time">'+time+'</span><span class="tl-name">'+name+'</span>'+
+'<span class="tl-dur">'+dur+' min</span></div>'+
+'<div class="tl-bar"><div class="tl-bar-fill" style="width:'+pct+'%"></div></div></div></div>';
+}
+
+/* ===== SELECT ALTERNATIVE BUS ===== */
+function pickAlt(dp,line){
+/* Recalculate everything with this specific departure */
+var ds=gid("iDate").value, ts=gid("iTime").value;
+if(!ds||!ts)return;
+
+var li=MODE==="bus"?DBUS:DBIK;
+var ix=parseInt(gid("dest").value);
+var dest=li[ix];
+var trv=dest.m||(parseInt(gid("custM").value)||20);
+var tp=ts.split(":"),arrM=parseInt(tp[0])*60+parseInt(tp[1]);
+var yg=gid("oYoga").checked,ll=gid("oLilly").checked,med=gid("oMed").checked;
+
+var dt=dtyp(ds);
+var wk=DEP==="ab"?WAB:WMS;
+var nHW=arrM-trv-BUF;
+
+/* Build bus result from selected departure */
+var br={dp:dp,ab:dp,lv:dp-wk,hw:dp+RAB,
+lb:DEP==="ab"?"Alte Brücke":"Marstallstraße",
+tight:dp>nHW-RAB,buf:Math.max(0,(nHW-RAB)-dp),line:line};
+
+var lvM=br.lv;
+
+/* Routine steps */
+var st=[];
+st.push({l:"Snooze / Wachwerden",m:20,i:"&#128564;",c:"tl-sleep"});
+if(yg)st.push({l:"Yoga & Meditation",m:23,i:"&#129496;",c:"tl-body"});
+st.push({l:"Gassi mit Lilly",m:15,i:"&#128021;",c:"tl-move"});
+st.push({l:"Kaffee & Frühstück",m:10,i:"&#9749;",c:"tl-misc"});
+st.push({l:"Hygiene",m:15,i:"&#128703;",c:"tl-body"});
+st.push({l:"Tasche & Schlüssel",m:5,i:"&#127890;",c:"tl-misc"});
+if(ll)st.push({l:"Lilly ins Büro",m:8,i:"&#128054;",c:"tl-move"});
+st.push({l:"Puffer",m:10,i:"&#9203;",c:"tl-misc"});
+
+var tot=0;
+for(var j=0;j<st.length;j++) tot+=st[j].m;
+var wkM=lvM-tot;
+var wk2M=wkM+20;
+var slM=wkM-SH*60;
+var meM=med?(slM-60):null;
+
+var cur=wkM;
+for(var j2=0;j2<st.length;j2++){st[j2].t0=cur;cur+=st[j2].m;}
+
+var maxDur=0;
+for(var j3=0;j3<st.length;j3++){if(st[j3].m>maxDur)maxDur=st[j3].m;}
+
+/* Update WECKER */
+var w='<div class="wk-row wk-1"><div class="wk-info"><div class="wk-num">1</div><div><div class="wk-label">Aufstehen</div><div class="wk-time">'+fm(wkM)+'</div></div></div><a class="wk-btn" href="'+alink(wkM,"1. Wecker - Aufstehen")+'">&#128276; Stellen</a></div>';
+w+='<div class="wk-row wk-2"><div class="wk-info"><div class="wk-num">2</div><div><div class="wk-label">Spätestens raus (+20 Min)</div><div class="wk-time">'+fm(wk2M)+'</div></div></div><a class="wk-btn" href="'+alink(wk2M,"2. Wecker - Jetzt aufstehen!")+'">&#128276; Stellen</a></div>';
+gid("oWeck").innerHTML=w;
+
+/* Update ABEND */
+var a="";
+if(med&&meM!==null){a+=rwA("&#128138; Medikation nehmen",fm(meM),meM,"Medikation nehmen","w");}
+a+=rwA("&#128719;&#65039; Ins Bett gehen",fm(slM),slM,"Schlafenszeit",slM<0?"a":"w");
+a+='<p class="note">'+SH+'h Schlaf bis zum 1. Wecker</p>';
+gid("oAbend").innerHTML=a;
+
+/* Update ROUTINE */
+var rh='<div class="tl">';
+for(var k=0;k<st.length;k++){rh+=tlItem(st[k].c,st[k].i,fm(st[k].t0),st[k].l,st[k].m,maxDur);}
+rh+='<div class="tl-item tl-go"><div class="tl-dot"></div>';
+rh+='<div class="tl-go-row" style="flex:1"><div style="display:flex;align-items:center;gap:8px">';
+rh+='<span class="tl-icon">&#128694;</span>';
+rh+='<span style="font-family:ui-monospace,SFMono-Regular,monospace;font-size:.95rem;font-weight:700;color:var(--danger)">'+fm(lvM)+'</span>';
+rh+='<span style="font-weight:600;color:var(--text)">Haus verlassen</span></div>';
+rh+=abtn(lvM,"Haus verlassen");
+rh+='</div></div></div>';
+gid("oRout").innerHTML=rh;
+
+/* Update VERBINDUNG */
+var dtL={w:"Werktag",s:"Samstag",u:"Sonn-/Feiertag"}[dt];
+var realArr2=br.hw+trv;
+var lateMin2=br.tight?Math.max(1,realArr2-arrM):0;
+var bb=br.tight?'<span class="badge b3">&#9888; ca. '+lateMin2+' Min zu spät</span>':'<span class="badge b1">+'+br.buf+' Min Puffer</span>';
+var bi="<h2><span class='ic'>&#128652;</span> Linie "+br.line+" · "+dtL+"</h2>";
+bi+=rw("Einstieg",br.lb);
+bi+=rw("Abfahrt",fm(br.dp)+bb);
+bi+=rw("Ausstieg","Hausackerweg");
+bi+=rw("Ankunft Hausackerweg",fm(br.hw));
+bi+=rw("Ankunft am Ziel",fm(realArr2)+(br.tight?' <span style="color:var(--danger);font-size:.78rem;font-weight:600">(Termin '+fm(arrM)+')</span>':''));
+if(br.tight) bi+='<p class="note" style="color:var(--danger)">&#9888;&#65039; Du kommst ca. '+lateMin2+' Min zu spät an. Wähle unten eine frühere Verbindung.</p>';
+bi+='<p class="note">Fahrplan '+(line==="35"?"gültig ab 28.09.2026":"gültig ab 14.12.2025 (kann abweichen)")+'</p>';
+gid("oVerb").innerHTML=bi;
+
+/* Update ALTERNATIVEN with new selection highlighted */
+renderAlts(dt,dp);
+
+/* Smooth scroll to results */
+gid("cWeck").scrollIntoView({behavior:"smooth"});
+}
+
+/* ===== RENDER ALTERNATIVES TABLE ===== */
+function renderAlts(dt,selDp){
+var allD=getAllDeps(dt);
+var earlier=[],later=[];
+for(var ai=0;ai<allD.length;ai++){
+if(allD[ai].dp<selDp&&allD[ai].dp>=selDp-90) earlier.push(allD[ai]);
+if(allD[ai].dp>selDp&&allD[ai].dp<=selDp+90) later.push(allD[ai]);
+}
+earlier=earlier.slice(-3);
+later=later.slice(0,3);
+var depLbl=DEP==="ab"?"Alte Brücke":"Marstallstr.";
+var ah='<p class="note" style="margin:-4px 0 8px">ab '+depLbl+' → Hausackerweg</p>';
+
+function altRow(item,isSel){
+if(isSel){
+return'<div class="at-row at-sel"><span class="at-line l'+item.line+'">'+item.line+'</span><span class="at-dep" style="color:var(--primary-dark);font-weight:700">'+fm(item.dp)+'</span><span class="at-arrow">→</span><span class="at-hw" style="color:var(--primary-dark)">'+fm(item.hw)+'</span><span class="at-pick">✓ gewählt</span></div>';
+}
+return'<div class="at-row" onclick="pickAlt('+item.dp+',\''+item.line+'\')"><span class="at-line l'+item.line+'">'+item.line+'</span><span class="at-dep">'+fm(item.dp)+'</span><span class="at-arrow">→</span><span class="at-hw">'+fm(item.hw)+'</span><span class="at-choose">auswählen ›</span></div>';
+}
+
+for(var ei=0;ei<earlier.length;ei++){ah+=altRow(earlier[ei],false);}
+/* Selected */
+var selItem=null;
+for(var si=0;si<allD.length;si++){if(allD[si].dp===selDp){selItem=allD[si];break;}}
+if(selItem)ah+=altRow(selItem,true);
+for(var li2=0;li2<later.length;li2++){ah+=altRow(later[li2],false);}
+
+ah+='<div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">';
+ah+='<span class="note" style="margin:0;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--primary-light);border:1px solid var(--primary)"></span>Linie 35 – 28.09.2026</span>';
+ah+='<span class="note" style="margin:0;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--accent-light);border:1px solid var(--accent)"></span>Linie 735 – 14.12.2025</span>';
+ah+='</div>';
+gid("oAlt").innerHTML=ah;
+}
+
+/* ========== MAIN CALC ========== */
 function doCalc(){
-  const ds=$('inDate').value;
-  const v=$('inDest').value;
-  if(!v)return;
+var ds=gid("iDate").value, ts=gid("iTime").value;
+if(!ds||!ts){alert("Bitte Datum und Uhrzeit eingeben.");return;}
 
-  const[type,minStr]=v.split('|');
-  let travel=parseInt(minStr);
-  if(travel===0)travel=parseInt($('inCustom').value)||0;
-  if(travel<=0){alert('Bitte Fahrzeit eingeben.');return}
+var li=MODE==="bus"?DBUS:DBIK;
+var ix=parseInt(gid("dest").value);
+var dest=li[ix];
+var trv=dest.m||(parseInt(gid("custM").value)||20);
+var tp=ts.split(":"),arrM=parseInt(tp[0])*60+parseInt(tp[1]);
+var yg=gid("oYoga").checked,ll=gid("oLilly").checked,med=gid("oMed").checked;
 
-  const hour=parseInt($('inHour').value);
-  const minute=parseInt($('inMin').value);
-  const sleepH=parseFloat($('inSleep').value);
-  const isBus=type==='bus';
-  const dType=dayType(ds);
-
-  const appt=new Date(ds+'T00:00:00');appt.setHours(hour,minute,0,0);
-
-  let leaveHome,arrive,busDep=null,allD=null,bufMin,reason;
-
-  if(isBus){
-    const maxBM=hour*60+minute-travel-BUSRIDE;
-    const found=findBus(dType,maxBM);
-    if(!found){alert('Keine Busverbindung an diesem Tag.');return}
-    busDep=found.dep;allD=found.all;
-    const busDate=new Date(appt);busDate.setHours(busDep.h,busDep.m,0,0);
-    leaveHome=new Date(busDate.getTime()-WALK*60000);
-    arrive=new Date(busDate.getTime()+(BUSRIDE+travel)*60000);
-    bufMin=Math.round((appt-arrive)/60000);
-    const maxH=Math.floor(maxBM/60),maxM=((maxBM%60)+60)%60;
-    reason=`Termin ${p(hour)}:${p(minute)} – ${travel} Min ab P+R – ${BUSRIDE} Min Bus → späteste Abfahrt ${p(maxH)}:${p(maxM)} → gewählt: ${p(busDep.h)}:${p(busDep.m)} (${Math.max(0,maxBM-busDep.t)} Min Reserve)`;
-  }else{
-    arrive=new Date(appt.getTime()-BIKEBUF*60000);
-    leaveHome=new Date(arrive.getTime()-travel*60000);
-    bufMin=BIKEBUF;
-    reason=`Termin ${p(hour)}:${p(minute)} – ${travel} Min Fahrrad – ${BIKEBUF} Min Puffer → los um ${ft(leaveHome)}`;
-  }
-
-  const wakeUp=new Date(leaveHome.getTime()-RTOTAL*60000);
-  const sleep=new Date(wakeUp.getTime()-sleepH*3600000);
-  const reminder=new Date(sleep.getTime()-60*60000);
-
-  // Timeline
-  const timeline=[];
-  let cur=new Date(wakeUp);
-  for(const s of ROUTINE){
-    const start=new Date(cur);
-    cur=new Date(cur.getTime()+s.m*60000);
-    timeline.push({...s,start,end:new Date(cur)});
-  }
-
-  const bs=bufMin>=10?'ok':bufMin>=5?'knapp':bufMin>=0?'krit':'spaet';
-
-  // ── Render ──
-  // Alarm bar
-  let ab=`<div class="alarm-bar-label">Wecker stellen:</div>`;
-  ab+=alarmBarBtn(sleep,'🌙','Schlafenszeit','Ab ins Bett — Morgenplaner');
-  if(reminderOn)ab+=alarmBarBtn(reminder,'💊','Reminder','Tablette nehmen — Morgenplaner');
-  ab+=alarmBarBtn(wakeUp,'⏰','Aufwachen','Aufwachen — Morgenplaner');
-  ab+=alarmBarBtn(leaveHome,'🚪','Los!','Haus verlassen — Morgenplaner');
-  $('alarmBar').innerHTML=ab;
-
-  // Row 1: Wecker + Haus verlassen
-  $('row1').innerHTML=
-    card('Wecker',ft(wakeUp),null,'⏰',true,wakeUp,'Aufwachen — Morgenplaner')+
-    card('Haus verlassen',ft(leaveHome),isBus?'→ 3 Min zur Haltestelle':`→ ${travel} Min Fahrrad`,'🚪',false,leaveHome,'Haus verlassen — Morgenplaner');
-
-  // Row 2: Bus/Arrival
-  if(isBus&&busDep){
-    $('row2').innerHTML=
-      card('Bus Alte Brücke',`${p(busDep.h)}:${p(busDep.m)}`,'Linie 35 → Hausackerweg','🚌',false)+
-      card('Ankunft Ziel',ft(arrive),`${pill(bs)} <span style="font-size:10px;color:rgba(255,255,255,0.25);margin-left:4px">${bufMin} Min</span>`,'📍',false);
-  }else{
-    $('row2').innerHTML=
-      card('Ankunft Ziel',ft(arrive),`${pill(bs)} <span style="font-size:10px;color:rgba(255,255,255,0.25);margin-left:4px">${bufMin} Min Puffer</span>`,'🚲',false);
-  }
-
-  // Row 3: Sleep + Reminder
-  let r3=card('Schlafenszeit',ft(sleep),`${sleepH}h Schlaf`,'🌙',false,sleep,'Ab ins Bett — Morgenplaner');
-  if(reminderOn)r3+=card('Abend-Reminder',ft(reminder),'60 Min vor Schlaf','💊',false,reminder,'Tablette nehmen — Morgenplaner');
-  $('row3').innerHTML=r3;
-
-  // Reasoning
-  $('reason').innerHTML=`<strong>Logik:</strong> ${reason}`;
-
-  // Routine
-  $('routineLabel').textContent=`☀️ Morgenroutine (${RTOTAL} Min)`;
-  let rhtml='';
-  timeline.forEach((s,i)=>{
-    rhtml+=`<div class="routine-row"><span class="routine-icon">${s.i}</span><div class="routine-info"><div class="routine-name">${s.l}</div><div class="routine-dur">${s.m} Min</div></div><span class="routine-time">${ft(s.start)}–${ft(s.end)}</span>${alarmBtn(s.start,s.l+' — Morgenplaner',false)}</div>`;
-  });
-  $('routine').innerHTML=rhtml;
-
-  // Bus schedule
-  if(isBus&&allD){
-    $('busSection').style.display='block';
-    $('schedLabel').textContent=`🚌 Fahrplan Linie 35 · ${dayLabel(dType)}`;
-    let sh='<div class="sched-grid">';
-    allD.forEach(d=>{
-      const sel=d.h===busDep.h&&d.m===busDep.m;
-      sh+=`<span class="sched-chip${sel?' sel':''}">${p(d.h)}:${p(d.m)}</span>`;
-    });
-    sh+='</div>';
-    $('schedule').innerHTML=sh;
-  }else{
-    $('busSection').style.display='none';
-  }
-
-  $('results').classList.add('show');
-  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+var lvM,br=null;
+if(MODE==="bus"){
+var dt=dtyp(ds);
+var nHW=arrM-trv-BUF;
+var rd=DEP==="ab"?RAB:RMS;
+var nDp=nHW-rd;
+br=fbus(nDp,dt);
+if(!br){alert("Keine passende Busverbindung gefunden.");return;}
+lvM=br.lv;
+}else{
+lvM=arrM-trv-BBUF;
 }
+
+/* Routine steps */
+var st=[];
+st.push({l:"Snooze / Wachwerden",m:20,i:"&#128564;",c:"tl-sleep"});
+if(yg)st.push({l:"Yoga & Meditation",m:23,i:"&#129496;",c:"tl-body"});
+st.push({l:"Gassi mit Lilly",m:15,i:"&#128021;",c:"tl-move"});
+st.push({l:"Kaffee & Frühstück",m:10,i:"&#9749;",c:"tl-misc"});
+st.push({l:"Hygiene",m:15,i:"&#128703;",c:"tl-body"});
+st.push({l:"Tasche & Schlüssel",m:5,i:"&#127890;",c:"tl-misc"});
+if(ll)st.push({l:"Lilly ins Büro",m:8,i:"&#128054;",c:"tl-move"});
+st.push({l:"Puffer",m:10,i:"&#9203;",c:"tl-misc"});
+
+var tot=0;
+for(var j=0;j<st.length;j++) tot+=st[j].m;
+var wkM=lvM-tot;
+var wk2M=wkM+20;
+var slM=wkM-SH*60;
+var meM=med?(slM-60):null;
+
+var cur=wkM;
+for(var j2=0;j2<st.length;j2++){st[j2].t0=cur;cur+=st[j2].m;}
+
+var maxDur=0;
+for(var j3=0;j3<st.length;j3++){if(st[j3].m>maxDur)maxDur=st[j3].m;}
+
+/* ===== CARD 1: WECKER ===== */
+var w='<div class="wk-row wk-1"><div class="wk-info"><div class="wk-num">1</div><div><div class="wk-label">Aufstehen</div><div class="wk-time">'+fm(wkM)+'</div></div></div><a class="wk-btn" href="'+alink(wkM,"1. Wecker - Aufstehen")+'">&#128276; Stellen</a></div>';
+w+='<div class="wk-row wk-2"><div class="wk-info"><div class="wk-num">2</div><div><div class="wk-label">Spätestens raus (+20 Min)</div><div class="wk-time">'+fm(wk2M)+'</div></div></div><a class="wk-btn" href="'+alink(wk2M,"2. Wecker - Jetzt aufstehen!")+'">&#128276; Stellen</a></div>';
+gid("oWeck").innerHTML=w;
+
+/* ===== CARD 2: ABEND ===== */
+var a="";
+if(med&&meM!==null){a+=rwA("&#128138; Medikation nehmen",fm(meM),meM,"Medikation nehmen","w");}
+a+=rwA("&#128719;&#65039; Ins Bett gehen",fm(slM),slM,"Schlafenszeit",slM<0?"a":"w");
+a+='<p class="note">'+SH+'h Schlaf bis zum 1. Wecker</p>';
+gid("oAbend").innerHTML=a;
+
+/* ===== CARD 3: MORGENROUTINE (Timeline) ===== */
+var rh='<div class="tl">';
+for(var k=0;k<st.length;k++){
+rh+=tlItem(st[k].c,st[k].i,fm(st[k].t0),st[k].l,st[k].m,maxDur);
+}
+rh+='<div class="tl-item tl-go"><div class="tl-dot"></div>';
+rh+='<div class="tl-go-row" style="flex:1"><div style="display:flex;align-items:center;gap:8px">';
+rh+='<span class="tl-icon">&#128694;</span>';
+rh+='<span style="font-family:ui-monospace,SFMono-Regular,monospace;font-size:.95rem;font-weight:700;color:var(--danger)">'+fm(lvM)+'</span>';
+rh+='<span style="font-weight:600;color:var(--text)">Haus verlassen</span></div>';
+rh+=abtn(lvM,"Haus verlassen");
+rh+='</div></div></div>';
+gid("oRout").innerHTML=rh;
+
+/* ===== CARD 4: VERBINDUNG ===== */
+if(MODE==="bus"&&br){
+gid("cVerb").style.display="block";
+var dtL={w:"Werktag",s:"Samstag",u:"Sonn-/Feiertag"}[dtyp(ds)];
+var realArr=br.hw+trv;
+var lateMin=br.tight?Math.max(1,realArr-arrM):0;
+var bb=br.tight?'<span class="badge b3">&#9888; ca. '+lateMin+' Min zu spät</span>':'<span class="badge b1">+'+br.buf+' Min Puffer</span>';
+var bi="<h2><span class='ic'>&#128652;</span> Linie "+br.line+" · "+dtL+"</h2>";
+bi+=rw("Einstieg",br.lb);
+bi+=rw("Abfahrt",fm(br.dp)+bb);
+bi+=rw("Ausstieg","Hausackerweg");
+bi+=rw("Ankunft Hausackerweg",fm(br.hw));
+bi+=rw("Ankunft am Ziel",fm(realArr)+(br.tight?' <span style="color:var(--danger);font-size:.78rem;font-weight:600">(Termin '+fm(arrM)+')</span>':''));
+if(br.tight) bi+='<p class="note" style="color:var(--danger)">&#9888;&#65039; Du kommst ca. '+lateMin+' Min zu spät an. Wähle unten eine frühere Verbindung.</p>';
+bi+='<p class="note">Fahrplan gültig ab 28.09.2026</p>';
+gid("oVerb").innerHTML=bi;
+
+/* ===== CARD 5: ALTERNATIVEN ===== */
+gid("cAlt").style.display="block";
+renderAlts(dtyp(ds),br.dp);
+
+}else if(MODE==="bike"){
+gid("cVerb").style.display="block";
+var bk="<h2><span class='ic'>&#128690;</span> Fahrrad</h2>";
+bk+=rw("Losfahren",fm(lvM));
+bk+=rw("Fahrzeit",trv+" Min");
+bk+=rw("Ankunft ca.",fm(lvM+trv));
+bk+=rw("Puffer",BBUF+" Min");
+gid("oVerb").innerHTML=bk;
+gid("cAlt").style.display="none";
+}else{
+gid("cVerb").style.display="none";
+gid("cAlt").style.display="none";
+}
+
+gid("RES").style.display="block";
+gid("RES").scrollIntoView({behavior:"smooth"});
+}
+
+/* ===== HEIMWEGPLANUNG ===== */
+function getReturnDeps(dt){
+var res=[];
+var sc35=R35[dt];
+if(sc35){for(var h in sc35){if(!sc35.hasOwnProperty(h))continue;
+var hr=parseInt(h);for(var j=0;j<sc35[h].length;j++){
+var dp=hr*60+sc35[h][j];
+res.push({line:"35",dp:dp,ab:dp+RD_AB,ms:dp+RD_MS_35});}}}
+var sc36=R36[dt];
+if(sc36){for(var h in sc36){if(!sc36.hasOwnProperty(h))continue;
+var hr=parseInt(h);for(var j=0;j<sc36[h].length;j++){
+var dp=hr*60+sc36[h][j];
+res.push({line:"36",dp:dp,ms:dp+RD_MS_36,bp:dp+RD_BP});}}}
+var sc14=R14[dt];
+if(sc14){for(var h in sc14){if(!sc14.hasOwnProperty(h))continue;
+var hr=parseInt(h);for(var j=0;j<sc14[h].length;j++){
+var dp=hr*60+sc14[h][j];
+res.push({line:"14",dp:dp,ab:dp+RD_AB,bp:dp+RD_BP});}}}
+res.sort(function(a,b){return a.dp-b.dp});
+return res;
+}
+
+function doHeim(){
+var now=new Date();
+var nowM=now.getHours()*60+now.getMinutes();
+var td=now.getFullYear()+"-"+(now.getMonth()+1<10?"0":"")+(now.getMonth()+1)+"-"+(now.getDate()<10?"0":"")+now.getDate();
+var dt=dtyp(td);
+var dtL={w:"Werktag",s:"Samstag",u:"Sonn-/Feiertag"}[dt];
+var all=getReturnDeps(dt);
+
+/* Show next 8 departures from now, plus 2 already passed */
+var futureIdx=-1;
+for(var i=0;i<all.length;i++){if(all[i].dp>=nowM){futureIdx=i;break;}}
+if(futureIdx===-1){
+gid("oHeim").innerHTML='<p class="note" style="text-align:center;padding:20px 0">Heute fahren keine Busse mehr ab Hausackerweg.</p>';
+gid("HEIM").style.display="block";
+gid("HEIM").scrollIntoView({behavior:"smooth"});
+return;
+}
+
+var startIdx=Math.max(0,futureIdx-2);
+var endIdx=Math.min(all.length,futureIdx+8);
+var firstFuture=true;
+
+var h='<p class="note" style="margin:-4px 0 8px">'+dtL+' · jetzt '+fm(nowM)+' Uhr</p>';
+for(var i2=startIdx;i2<endIdx;i2++){
+var d=all[i2];
+var gone=d.dp<nowM;
+var isNext=(!gone&&firstFuture);
+if(isNext) firstFuture=false;
+var cls="hw-row"+(gone?" hw-gone":"")+(isNext?" hw-next":"");
+var lc="hl"+d.line;
+var dest="";
+if(d.line==="35") dest="→ Alte Br. "+fm(d.ab)+" · Marstallstr. "+fm(d.ms);
+else if(d.line==="36") dest="→ Marstallstr. "+fm(d.ms)+" · Bismarckpl. "+fm(d.bp);
+else dest="→ Alte Br. "+fm(d.ab)+" · Bismarckpl. "+fm(d.bp);
+var wait="";
+if(!gone){var wm=d.dp-nowM;wait=wm<1?"jetzt":"in "+wm+" Min";}
+h+='<div class="'+cls+'">';
+h+='<span class="hw-line '+lc+'">'+d.line+'</span>';
+h+='<span class="hw-dep">'+fm(d.dp)+'</span>';
+h+='<span class="hw-dest">'+dest+'</span>';
+if(wait) h+='<span class="hw-wait">'+wait+'</span>';
+h+='</div>';
+}
+
+h+='<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">';
+h+='<span class="note" style="margin:0;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--primary-light);border:1px solid var(--primary)"></span>L35 → AB + MS</span>';
+h+='<span class="note" style="margin:0;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--purple-light);border:1px solid var(--purple)"></span>L36 → MS + Bismarckpl.</span>';
+h+='<span class="note" style="margin:0;display:flex;align-items:center;gap:5px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--danger-light);border:1px solid var(--danger)"></span>L14 → Nachtbus</span>';
+h+='</div>';
+
+gid("oHeim").innerHTML=h;
+gid("HEIM").style.display="block";
+gid("HEIM").scrollIntoView({behavior:"smooth"});
+}
+
+/* ===== INIT ===== */
+var _n=new Date();_n.setDate(_n.getDate()+1);
+var _y=_n.getFullYear(),_m=_n.getMonth()+1,_d=_n.getDate();
+gid("iDate").value=_y+"-"+(_m<10?"0":"")+_m+"-"+(_d<10?"0":"")+_d;
+fillD();
 </script>
 </body>
 </html>
